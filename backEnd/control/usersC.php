@@ -99,7 +99,7 @@ class chatC
        }
    }
 
-   {
+   private function logIn(){
     $error=[];
     $user = $_POST["userName"];
     $email = $_POST["email"];
@@ -107,10 +107,10 @@ class chatC
     $userPattern ="/^[a-zA-Z0-9,',.,_]";
     preg_match_all($userPattern,$user,$userMatch);	
     // $passPattern=
-    preg_match_all($passPattern,$password,);
+    // preg_match_all($passPattern,$password);
     
     //validate user name
-    if (empty($user) {
+    if (empty($user)) {
         array_push($error,"User name was not inserted.");
       } else if(!empty($this->usersModel->checkUser($user))){
         array_push($error,"This user already exists!");
@@ -136,13 +136,14 @@ class chatC
     }else if(valid_pass($password) == false){
         array_push($error,"Not valid password.");
     }else if(valid_pass($password)){
-        $hased_password = valid_pass($password);
-        if($hashed_password !== $this->userModel->checkPassword($password)){
+        $_POST["password"] = valid_pass($password);
+        if($password !== $this->userModel->checkPassword($password)){
             array_push($error,"Your password is incorect");
         }
     }
  //Final validation-setting session for a specific user
     if(empty($error)){
+        if($hased_password == ){}
         $result = $this->usersModel->selectItem($_POST);
         if ($result === false) {array_push($err,"Invalid Log In"); }
         if (empty($error)) {
@@ -153,8 +154,8 @@ class chatC
             return $_SESSION["role"];
         }else{sleep(2);return $err;}
     }
-}
+    }
 }
 
-}
+
 ?>
