@@ -29,7 +29,7 @@ class chatC
 			//validate user name
 			if (empty($user) {
 				array_push($error,"User name was not inserted.");
-			  } else if(!empty($this->usersModel->checkUser($user)){
+			  } else if(!empty($this->usersModel->checkUser($user))){
 				array_push($error,"This user already exists!");
 			  }else if($user == $userMatch[0][0]) {
 				$user = test_input($user);
