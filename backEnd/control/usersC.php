@@ -143,7 +143,6 @@ class chatC
     }
  //Final validation-setting session for a specific user
     if(empty($error)){
-        if($hased_password == ){}
         $result = $this->usersModel->selectItem($_POST);
         if ($result === false) {array_push($err,"Invalid Log In"); }
         if (empty($error)) {
