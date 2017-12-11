@@ -7,7 +7,12 @@ class chatC
 	function __construct(){
 		$this->usersModel = new usersModel();
 	}
-   
+   function signUp(){
+       $fName = $_POST["firstName"];
+       $lname = $_POST["lastName"];
+       $userName = $_POST["userName"];
+       $email = $_POST["email"];
+   }
 
 
 }?>
