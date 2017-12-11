@@ -151,7 +151,9 @@ class chatC
             $_SESSION["role"]= $result["role"];
             $_SESSION['LAST_ACTIVITY'] = time();
             return $_SESSION["role"];
-        }else{sleep(2);return $err;}
+        }else{
+            sleep(2);return $error;
+        }
     }
     }
 }
