@@ -2,13 +2,23 @@
 require "model/usersModel.php";
 require "../helpers/password.php";
 
-class chatC
+class userC
 {
 	private $usersModel;
 	function __construct(){
 		$this->usersModel = new usersModel();
 	}
-   private function signUp(){
+    function getIp(){
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+   protected function signUp(){
        $err=[];
        function test_input($data) {
            $data = trim($data);
@@ -17,32 +27,32 @@ class chatC
            return $data;
        }
        if(!empty($_POST["firstName"])){
-            $fName = test_input($_POST["firstName"]);
+           $_POST["firstName"] = test_input($_POST["firstName"]);
        }else{
            array_push($err,"Empty Fisrt Name");
        }
        if(!empty($_POST["lastName"])){
-            $lName = test_input($_POST["lastName"]);
+           $_POST["lastName"] = test_input($_POST["lastName"]);
        }else{
            array_push($err,"Empty Last Name");
        }
        if(!empty($_POST["userName"])){
-           $userName = test_input($_POST["userName"]);
+           $_POST["userName"] = test_input($_POST["userName"]);
        }else{
            array_push($err,"Empty User Name");
        }
        if(!empty($_POST["email"])){
-           $email = test_input($_POST["email"]);
+           $_POST["email"] = test_input($_POST["email"]);
        }else{
            array_push($err,"Empty Email");
        }
        if(!empty($_POST["birthDate"])){
-           $birthDate = test_input($_POST["birthDate"]);
+           $_POST["birthDate"] = test_input($_POST["birthDate"]);
        }else{
            array_push($err,"Empty Birth Date");
        }
        if(!empty($_POST["phone"])){
-           $phone = test_input($_POST["phone"]);
+           $_POST["phone"] = test_input($_POST["phone"]);
        }else{
            array_push($err,"Empty Phone Number");
        }
@@ -58,92 +68,100 @@ class chatC
        $patPhone = "/^[1-9,0, ,+]*$/";
 
        if(empty($err)){
-            preg_match_all($patUserName, $userName, $match_userName);
-            preg_match_all($patName,$fName,$match_fName);
-            preg_match_all($patName,$lName,$match_lName);
-            preg_match_all($patPhone,$phone,$match_phone);
-            if($userName != $match_userName){
+           preg_match_all($patUserName, $_POST["userName"], $match_userName);
+           preg_match_all($patName,$_POST["firstName"],$match_fName);
+           preg_match_all($patName,$_POST["lastName"],$match_lName);
+           preg_match_all($patPhone,$_POST["phone"],$match_phone);
+            if($_POST["userName"] != $match_userName){
                 array_push($err,"Invalid User Name");
-            }else if (!empty($this->userModel->checkUser($userName))){
+            }else if (!empty($this->userModel->checkUser($_POST["userName"]))){
                 array_push($err,"User Name already exists");
             }
-            if($fName != $match_fName){
+            if($_POST["firstName"] != $match_fName){
                 array_push($err,"Invalid First Name");
             }
-            if($lName != $match_lName){
+            if($_POST["lastName"] != $match_lName){
                 array_push($err,"Invalid Last Name");
             }
-            if($phone != $match_phone){
+            if($_POST["phone"] != $match_phone){
                 array_push($err,"Invalid phone number");
             }
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
      		array_push($err,"Invalid email, ");
-		    }else if (!empty($this->userModel->checkEmail($email))){
+		    }else if (!empty($this->userModel->checkEmail($_POST["email"]))){
                 array_push($err,"Email already exists");
             }
-            $test_arr  = explode(':', $birthDate);
-            if (checkdate($birthDate[0], $birthDate[1], $birthDate[2]) == FALSE) {
+            $test_arr  = explode('-', $_POST["birthDate"]);
+            if (checkdate($test_arr[0], $test_arr[1], $test_arr[2]) == FALSE) {
                 array_push($err,"Invalid Date");
-            }else if(parseInt($birthDate[2]) > 150){
+            }else if(parseInt($test_arr[2]) > 150){
                 array_push($err,"Are you really that old ?");
             }
 
             if(empty($err)){
+                $_POST["userIp"] = getIp();
+                $_POST["birthDate"] = $test_arr[2] ."-". $test_arr[0] ."-". $test_arr[1];
                 $id = $this->usersModel->insertItem($_POST);
                 if(parseInt($id) != "NaN" && $id != 0){
                     return "Sign Up Succesfully!";
                 }else{
-                    return $err;
+                    return "Internal Server Error";
                 }
+            }else{
+                return $err;
             }
+       }else{
+           return $err;
        }
    }
 
-   private function logIn(){
+    //private scope when you want your variable/function to be visible in its own class only---nu putea sa fie private si sa fie folosita din index
+    //protected scope when you want to make your variable/function visible in all classes that extend current class including the parent class.
+   protected function logIn(){
     $error=[];
-    $user = $_POST["userName"];
-    $email = $_POST["email"];
-    $password =$_POST["password"];
+    $data['user'] = $_POST["userName"];
+    $data['email'] = $_POST["email"];
+    $data['password'] =$_POST["password"];
     $userPattern ="/^[a-zA-Z0-9,',.,_]";
-    preg_match_all($userPattern,$user,$userMatch);	
+    preg_match_all($userPattern,$data['user'],$userMatch);
     // $passPattern=
-    // preg_match_all($passPattern,$password);
-    
+    // preg_match_all($passPattern,$data['password']);
+
     //validate user name
-    if (empty($user)) {
+    if (empty($data['user'])) {
         array_push($error,"User name was not inserted.");
-      } else if(!empty($this->usersModel->checkUser($user))){
+      } else if(!empty($this->usersModel->checkUser($data['user']))){
         array_push($error,"This user already exists!");
-      }else if($user == $userMatch[0][0]) {
-        $user = test_input($user);
+      }else if($data['user'] == $userMatch[0][0]) {
+        $data['user'] = test_input($data['user']);
       }
-    
+
       //validate email
-    if(empty($email)) {
+    if(empty($data['email'])) {
         array_push($error,"Please enter your email, ");
       }else if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
          array_push($err,"Invalid email, ");
-      }else if(!empty($this->usersModel->checkEmail($email))){
+      }else if(!empty($this->usersModel->checkEmail($data['email']))){
          array_push($error,"Ths email already exists!");
       }else{
-          $email = test_input($user); 
-      }  
+          $data['email'] = test_input($data['user']);
+      }
       //Validate password
-    if(empty($password)){
+    if(empty($data['password'])){
         array_push($error,"Please enter your password, ");
-    }else if(strlen($password)<6){
+    }else if(strlen($data['password'])<6){
         array_push($error,"Your password must be greater than 6 chars");
-    }else if(valid_pass($password) == false){
+    }else if(valid_pass($data['password']) == false){
         array_push($error,"Not valid password.");
-    }else if(valid_pass($password)){
-        $_POST["password"] = valid_pass($password);
-        if($password !== $this->userModel->checkPassword($password)){
+    }else if(valid_pass($data['password'])){
+        $data["password"] = valid_pass($data['password']);
+        if($data['password'] !== $this->userModel->checkPassword($data['password'])){
             array_push($error,"Your password is incorect");
         }
     }
  //Final validation-setting session for a specific user
     if(empty($error)){
-        $result = $this->usersModel->selectItem($_POST);
+        $result = $this->usersModel->selectItem($data);
         if ($result === false) {array_push($err,"Invalid Log In"); }
         if (empty($error)) {
             $_SESSION["id"]=$result["id"];
