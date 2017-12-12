@@ -9,8 +9,10 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
     session_destroy();
 }
 require "config/routes.php";
-define("APP_FOLDER", "/backEnd");
+define("APP_FOLDER", "/Parking/backEnd/");
+echo "</pre>";
 var_dump($_SERVER);
+echo "</pre>";
 die();
 $currentRoute = str_replace(APP_FOLDER, "", $_SERVER["REDIRECT_URL"]);
 
