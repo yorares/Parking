@@ -1,4 +1,4 @@
 <?php
-$routes[];
+$routes["/signUp"] = ["class" => "usersC", "method" => "signUp"];
 
 ?>

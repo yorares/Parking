@@ -1,4 +1,8 @@
 <IfModule mod_rewrite.c>
-RewriteEngine on
-RewriteRule ^(.*)$ index.php [L]
+  RewriteEngine on
+  RewriteBase /backEnd/
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.php [L]
 </IfModule>

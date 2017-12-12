@@ -2,7 +2,7 @@
 require "model/usersModel.php";
 require "../helpers/password.php";
 
-class userC
+class usersC
 {
 	private $usersModel;
 	function __construct(){

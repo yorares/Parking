@@ -8,8 +8,13 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
     session_unset();
     session_destroy();
 }
+var_dump($_SERVER);
+die();
+
 require "config/routes.php";
 define("APP_FOLDER", "/backEnd");
+var_dump($_SERVER);
+die();
 $currentRoute = str_replace(APP_FOLDER, "", $_SERVER["REDIRECT_URL"]);
 
 
