@@ -50,5 +50,22 @@ class usersModel extends db
         $sth->execute($params);
         return $sth->rowCount();
     }
+    function deleteItem($item){
+        $params = [$item];
+
+        $query = 'DELETE FROM `users` WHERE id = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
+    function selectItemByName($items){
+        $params = [$items];
+
+        $query = 'SELECT * FROM `users` WHERE user_name = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+
+        return $sth->fetch(PDO::FETCH_ASSOC);
+    }
 
 }?>

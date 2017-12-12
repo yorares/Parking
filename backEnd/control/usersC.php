@@ -176,17 +176,30 @@ class usersC
 
     function deleteUser(){
         if (empty($_POST['id'])) {
-            return "Cannot find user id to delete";
+            return "No user id to delete";
         } else {
-            return $this->usersModel->deleteItem($_POST["id"]);
+            $count = $this->usersModel->deleteItem($_POST["id"]);
+            if($count == 1){
+                return "User Deleted Succesfully";
+            }else{
+                return "User id not found";
+            }
         }
     }
 
     function getUser(){
-        if (empty($_POST['id'])) {
-            return send_error("Cannot get user id");
+        var_dump( $_POST);
+        if (empty($_POST['userName'])) {
+            return "Cannot get user id1";
         } else {
-            return $this->usersModel->selectItem($_GET['id']);
+            $account = $this->usersModel->selectItemByName($_POST['userName']);
+            var_dump($account);
+            if($account == FALSE){
+                return "Cannot get user id2";
+            }else{
+                return $account;
+            }
+
         }
     }
 
