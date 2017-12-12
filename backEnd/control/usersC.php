@@ -1,6 +1,6 @@
 <?php
-require "model/usersModel.php";
-require "../helpers/password.php";
+require "model/usersM.php";
+require "helpers/password.php";
 
 class usersC
 {
@@ -18,7 +18,7 @@ class usersC
         }
         return $ip;
     }
-   protected function signUp(){
+   public function signUp(){
        $err=[];
        function test_input($data) {
            $data = trim($data);
@@ -56,13 +56,13 @@ class usersC
        }else{
            array_push($err,"Empty Phone Number");
        }
-
+       if(!empty($_POST["password"])){
        if(valid_pass($_POST["password"]) == FALSE){
            array_push($err,"Password not valid");
        }else{
             $_POST["password"] = valid_pass($_POST["password"]);
        }
-
+       }
        $patUserName = "/^[A-Z,a-z,',_,.,1-9,0]*$/";
        $patName = "/^[A-Z,a-z, ,']*$/";
        $patPhone = "/^[1-9,0, ,+]*$/";
@@ -117,7 +117,7 @@ class usersC
 
     //private scope when you want your variable/function to be visible in its own class only---nu putea sa fie private si sa fie folosita din index
     //protected scope when you want to make your variable/function visible in all classes that extend current class including the parent class.
-   protected function logIn(){
+   public function logIn(){
     $error=[];
     $data['user'] = $_POST["userName"];
     $data['email'] = $_POST["email"];

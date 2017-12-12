@@ -9,11 +9,11 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
     session_destroy();
 }
 require "config/routes.php";
-define("APP_FOLDER", "/backEnd");
-var_dump($_SERVER);
-die();
-$currentRoute = str_replace(APP_FOLDER, "", $_SERVER["REDIRECT_URL"]);
+define("APP_FOLDER", "/Parking/backEnd/");
 
+$currentRoute = str_replace(APP_FOLDER, "", $_SERVER["REDIRECT_URL"]);
+echo $currentRoute;
+var_dump($_SERVER);
 
 if (!empty($currentRoute)) {
 
@@ -25,7 +25,7 @@ if (!empty($currentRoute)) {
 		$class = $routes[$currentRoute]["class"];
         $method = $routes[$currentRoute]["method"];
 
-		require "app/controlls/".$class.".php";
+		require "/control/".$class.".php";
 		$controllUser = new $class();
 		$response = $controllUser->$method();
 		echo json_encode($response);
