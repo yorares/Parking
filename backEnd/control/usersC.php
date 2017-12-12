@@ -173,8 +173,39 @@ class userC
             sleep(2);return $error;
         }
     }
+ }
+
+    function deleteUser(){
+        if (empty($_POST['id'])) {
+            return "Cannot find user id to delete";    
+        } else {
+            return $this->usersModel->deleteItem($_POST["id"]);     
+        }
     }
+
+    function getUser(){
+        if (empty($_POST['id'])) {
+            return send_error("Cannot get user id");    
+        } else {
+            return $this->usersModel->selectItem($_GET['id']);    
+        }
+    }
+
+    function getAll() {
+        return $this->usersModel->selectAll();
+    }
+
+    // function updateUser() {
+    //     if (empty($_POST['id']){
+    //         return "Invalid id or id not found!";
+    //     }else if(empty($_POST['userName']){
+    //         return "Username not found";
+    //     }else if($_POST['name']){
+    //         return "Empty name field";
+    //     }else if(){
+
+    //     }
+
+    //     }
 }
-
-
 ?>
