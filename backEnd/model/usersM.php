@@ -2,7 +2,7 @@
 require_once "db.php";
 class usersModel extends db
 {
-	protected function insertItem($item) {
+	public function insertItem($item) {
         $params = [ $item["firstName"],
                     $item["lastName"],
                     $item["userName"],
@@ -16,6 +16,39 @@ class usersModel extends db
         $sth = $this->db->prepare($query);
         $sth->execute($params);
         return $this->db->lastInsertId();
+    }
+    function selectItem($item){
+
+        if(!empty($item["email"])){
+            $item["who"] = $item["email"];
+            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date` FROM `users` WHERE `email` = ? && password = ?;";
+        }else if (!empty($item["user"])){
+            $item["who"] = $item["user"];
+            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date` FROM `users` WHERE `user_name` = ? && password = ?;";
+        }
+        $params = [$item["who"],
+                    $item["password"]];
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+
+        //var_dump($sth->fetch(PDO::FETCH_ASSOC));
+        return $sth->fetch(PDO::FETCH_ASSOC);
+    }
+    function checkEmail($item){
+        $params = [ $item["email"] ];
+
+        $query = 'SELECT * FROM `users` WHERE email = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
+    function checkUser($item){
+        $params = [ $item["userName"]];
+
+        $query = 'SELECT * FROM `users` WHERE email = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
     }
 
 }?>

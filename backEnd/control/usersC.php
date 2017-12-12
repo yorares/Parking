@@ -8,7 +8,9 @@ class usersC
 	function __construct(){
 		$this->usersModel = new usersModel();
 	}
-    function getIp(){
+
+   public function signUp(){
+       function getIp(){
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -18,7 +20,6 @@ class usersC
         }
         return $ip;
     }
-   public function signUp(){
        $err=[];
        function test_input($data) {
            $data = trim($data);
@@ -72,29 +73,31 @@ class usersC
            preg_match_all($patName,$_POST["firstName"],$match_fName);
            preg_match_all($patName,$_POST["lastName"],$match_lName);
            preg_match_all($patPhone,$_POST["phone"],$match_phone);
-            if($_POST["userName"] != $match_userName){
+           if($_POST["userName"] != $match_userName[0][0]){
                 array_push($err,"Invalid User Name");
-            }else if (!empty($this->userModel->checkUser($_POST["userName"]))){
+            }else if ($this->usersModel->checkUser($_POST["userName"]) >= 1){
                 array_push($err,"User Name already exists");
             }
-            if($_POST["firstName"] != $match_fName){
+            if($_POST["firstName"] != $match_fName[0][0]){
                 array_push($err,"Invalid First Name");
+                echo $_POST["firstName"];
+                var_dump( $match_fName[0][0]);
             }
-            if($_POST["lastName"] != $match_lName){
+            if($_POST["lastName"] != $match_lName[0][0]){
                 array_push($err,"Invalid Last Name");
             }
-            if($_POST["phone"] != $match_phone){
+            if($_POST["phone"] != $match_phone[0][0]){
                 array_push($err,"Invalid phone number");
             }
             if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
      		array_push($err,"Invalid email, ");
-		    }else if (!empty($this->userModel->checkEmail($_POST["email"]))){
+		    }else if ($this->usersModel->checkEmail($_POST["email"]) >= 1){
                 array_push($err,"Email already exists");
             }
             $test_arr  = explode('-', $_POST["birthDate"]);
             if (checkdate($test_arr[0], $test_arr[1], $test_arr[2]) == FALSE) {
                 array_push($err,"Invalid Date");
-            }else if(parseInt($test_arr[2]) > 150){
+            }else if(settype($test_arr[2],'integer') > 1900 || settype($test_arr[2],'integer') < date("Y")){
                 array_push($err,"Are you really that old ?");
             }
 
@@ -102,9 +105,10 @@ class usersC
                 $_POST["userIp"] = getIp();
                 $_POST["birthDate"] = $test_arr[2] ."-". $test_arr[0] ."-". $test_arr[1];
                 $id = $this->usersModel->insertItem($_POST);
-                if(parseInt($id) != "NaN" && $id != 0){
+                if(settype($id,'integer') != "NaN" || settype($id,'integer') != 0){
                     return "Sign Up Succesfully!";
                 }else{
+                    var_dump($id);
                     return "Internal Server Error";
                 }
             }else{
@@ -119,56 +123,51 @@ class usersC
     //protected scope when you want to make your variable/function visible in all classes that extend current class including the parent class.
    public function logIn(){
     $error=[];
-    $data['user'] = $_POST["userName"];
-    $data['email'] = $_POST["email"];
+   // $data['user'] = $_POST["userName"];
+   // $data['email'] = $_POST["email"];
     $data['password'] =$_POST["password"];
-    $userPattern ="/^[a-zA-Z0-9,',.,_]";
-    preg_match_all($userPattern,$data['user'],$userMatch);
+    $userPattern ="/^[a-z,A-Z,0-9,',.,_]/";
+    preg_match_all($userPattern,$_POST["userName"],$userMatch);
     // $passPattern=
     // preg_match_all($passPattern,$data['password']);
 
     //validate user name
-    if (empty($data['user'])) {
-        array_push($error,"User name was not inserted.");
-      } else if(!empty($this->usersModel->checkUser($data['user']))){
-        array_push($error,"This user already exists!");
-      }else if($data['user'] == $userMatch[0][0]) {
-        $data['user'] = test_input($data['user']);
+    if(!empty($_POST["userName"])){
+        $data['user'] = $_POST["userName"];
+        if($_POST["userName"] == $userMatch[0][0]) {
+         $data['user'] = test_input($_POST["userName"]);
       }
-
+    }else if(!empty($_POST["email"])){
+        $data['email'] = $_POST["email"];
       //validate email
-    if(empty($data['email'])) {
-        array_push($error,"Please enter your email, ");
-      }else if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
          array_push($err,"Invalid email, ");
-      }else if(!empty($this->usersModel->checkEmail($data['email']))){
-         array_push($error,"Ths email already exists!");
       }else{
-          $data['email'] = test_input($data['user']);
+          $data['email'] = test_input($_POST["email"]);
       }
+    }else {
+        array_push($error,"User name or Email was not inserted.");
+    }
       //Validate password
     if(empty($data['password'])){
         array_push($error,"Please enter your password, ");
-    }else if(strlen($data['password'])<6){
-        array_push($error,"Your password must be greater than 6 chars");
     }else if(valid_pass($data['password']) == false){
         array_push($error,"Not valid password.");
     }else if(valid_pass($data['password'])){
         $data["password"] = valid_pass($data['password']);
-        if($data['password'] !== $this->userModel->checkPassword($data['password'])){
-            array_push($error,"Your password is incorect");
-        }
     }
  //Final validation-setting session for a specific user
     if(empty($error)){
+        var_dump($data['user']);
+        var_dump($data);
         $result = $this->usersModel->selectItem($data);
-        if ($result === false) {array_push($err,"Invalid Log In"); }
+        if ($result == FALSE) {array_push($error,"Invalid Log In"); }
         if (empty($error)) {
             $_SESSION["id"]=$result["id"];
-            $myAccount = $this->usersModel->selectById($_SESSION["id"]);
-            $_SESSION["role"]= $result["role"];
+            //$myAccount = $this->usersModel->selectById($_SESSION["id"]);
+            $_SESSION["role"]= $result["admin"];
             $_SESSION['LAST_ACTIVITY'] = time();
-            return $_SESSION["role"];
+            return $_SESSION["id"].$_SESSION["role"];
         }else{
             sleep(2);return $error;
         }
@@ -177,17 +176,17 @@ class usersC
 
     function deleteUser(){
         if (empty($_POST['id'])) {
-            return "Cannot find user id to delete";    
+            return "Cannot find user id to delete";
         } else {
-            return $this->usersModel->deleteItem($_POST["id"]);     
+            return $this->usersModel->deleteItem($_POST["id"]);
         }
     }
 
     function getUser(){
         if (empty($_POST['id'])) {
-            return send_error("Cannot get user id");    
+            return send_error("Cannot get user id");
         } else {
-            return $this->usersModel->selectItem($_GET['id']);    
+            return $this->usersModel->selectItem($_GET['id']);
         }
     }
 

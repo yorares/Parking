@@ -9,11 +9,11 @@ function valid_pass($pass) {
     $r3='/[!@#$%^&*()\-_=+{};:,<.>]/';  // whatever you mean by 'special char'
     $r4='/[0-9]/';  //numbers
 
-    if(preg_match_all($r1,$pass, $o)<2) return FALSE;
+    if(preg_match_all($r1,$pass, $o)<1) return FALSE;
 
     if(preg_match_all($r2,$pass, $o)<2) return FALSE;
 
-    if(preg_match_all($r3,$pass, $o)<2) return FALSE;
+    if(preg_match_all($r3,$pass, $o)<1) return FALSE;
 
     if(preg_match_all($r4,$pass, $o)<2) return FALSE;
 
