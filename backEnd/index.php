@@ -13,7 +13,7 @@ define("APP_FOLDER", "/Parking/backEnd/");
 $currentRoute = str_replace(APP_FOLDER, "", $_SERVER["REDIRECT_URL"]);
 
 echo $currentRoute;
-var_dump($_SERVER);
+//var_dump($_SERVER);
 
 if (!empty($currentRoute)) {
 

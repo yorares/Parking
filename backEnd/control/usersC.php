@@ -159,14 +159,16 @@ class usersC
     }
  //Final validation-setting session for a specific user
     if(empty($error)){
-        var_dump($data['user']);
-        var_dump($data);
+       // var_dump($data['user']);
+       // var_dump($data);
         $result = $this->usersModel->selectItem($data);
-        if ($result == FALSE) {array_push($error,"Invalid Log In"); }
+        if ($result == FALSE) {array_push($error,"Invalid Log In");}
+        var_dump($result);
+        if($result["active"] == "banned"){array_push($error,"You are Banned!");}
         if (empty($error)) {
             $_SESSION["id"]=$result["id"];
             //$myAccount = $this->usersModel->selectById($_SESSION["id"]);
-            $this->userModel->changeStatus($_SESSION["id"]);
+            $this->usersModel->changeStatus($_SESSION["id"]);
             $_SESSION["role"]= $result["admin"];
             $_SESSION['LAST_ACTIVITY'] = time();
             return $_SESSION["id"].$_SESSION["role"];
@@ -314,8 +316,8 @@ class usersC
                  $_POST["userIp"] = getIp();
                  $_POST["birthDate"] = $test_arr[2] ."-". $test_arr[0] ."-". $test_arr[1];
                  $id = $this->usersModel->editItem($_POST);
-                 if(settype($id,'integer') != "NaN" || settype($id,'integer') != 0){
-                     return "Sign Up Succesfully!";
+                 if(settype($id,'integer') != "NaN" || settype($id,'integer') == 1){
+                     return "Edit Succesfull!";
                  }else{
                      var_dump($id);
                      return "Internal Server Error";
@@ -328,5 +330,27 @@ class usersC
          }
 
         }
+     function banUser(){
+         if($_SESSION["role"] == "admin"){
+             $variabial = $this->usersModel->banUser($_POST);
+             if($variabial != 1){
+                 return "Something went wrong";
+             }else{
+                 return $variabial;
+             }
+
+         }
+     }
+     function unBanUser(){
+         if($_SESSION["role"] == "admin"){
+             $variabial = $this->usersModel->unBanUser($_POST);
+             if($variabial != 1){
+                 return "Something went wrong";
+             }else{
+                 return $variabial;
+             }
+
+         }
+     }
 }
 ?>

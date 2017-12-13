@@ -20,10 +20,10 @@ class usersModel extends db
     function selectItem($item){
         if(!empty($item["email"])){
             $item["who"] = $item["email"];
-            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date` FROM `users` WHERE `email` = ? && password = ?;";
+            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date`, `active` FROM `users` WHERE `email` = ? && password = ?;";
         }else if (!empty($item["user"])){
             $item["who"] = $item["user"];
-            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date` FROM `users` WHERE `user_name` = ? && password = ?;";
+            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date`, `active` FROM `users` WHERE `user_name` = ? && password = ?;";
         }
         $params = [$item["who"],
                     $item["password"]];
@@ -69,19 +69,36 @@ class usersModel extends db
                    $item["password"],
                    $item["birthDate"],
                    $item["phone"],
-                   $item["userIp"]];
+                   $item["id"]];
 
-        $query = 'INSERT INTO `users`(`first_name`, `last_name`, `user_name`, `email`, `password`, `birth_date`, `phone`, `user_ip`) VALUES (?,?,?,?,?,?,?,?)';
+        $query = 'UPDATE `users` SET `first_name`=?,`last_name`=?,`user_name`=?,`email`=?,`password`=?,`birth_date`=?,`phone`=?,`picture_link`=? WHERE id = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
-        return $this->db->lastInsertId();
+        return $this->db->rowCount();
     }
 
     function changeStatus($item){
         $params=[$item];
-        $query = 'UPDATE `users` SET user_status="online", last_login = CURENT_TIMESTAMP   WHERE user_id = ?';
+        $query = 'UPDATE `users` SET user_status="online", last_login = NOW() WHERE id = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
+    }
+    function banUser($item){
+        $params = [ $item["banTime"],
+                   $item["id"]];
+
+        $query = 'UPDATE `users` SET active="banned",`ban_time`= ? WHERE `id`=?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
+    function unBanUser($item){
+        $params = [ $item["id"]];
+
+        $query = 'UPDATE `users` SET active="unbanned", ban_time = null WHERE `id`=?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
     }
 
 }?>
