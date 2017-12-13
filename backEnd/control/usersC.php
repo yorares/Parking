@@ -216,17 +216,116 @@ class usersC
         return $this->usersModel->selectAll();
     }
 
-    // function updateUser() {
-    //     if (empty($_POST['id']){
-    //         return "Invalid id or id not found!";
-    //     }else if(empty($_POST['userName']){
-    //         return "Username not found";
-    //     }else if($_POST['name']){
-    //         return "Empty name field";
-    //     }else if(){
+     function updateUser() {
 
-    //     }
+         function getIp(){
+             if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+                 $ip = $_SERVER['HTTP_CLIENT_IP'];
+             } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+             } else {
+                 $ip = $_SERVER['REMOTE_ADDR'];
+             }
+             return $ip;
+         }
+         $err=[];
+         function test_input($data) {
+             $data = trim($data);
+             $data = stripslashes($data);
+             $data = htmlspecialchars($data);
+             return $data;
+         }
+         if(!empty($_POST["firstName"])){
+             $_POST["firstName"] = test_input($_POST["firstName"]);
+         }else{
+             array_push($err,"Empty Fisrt Name");
+         }
+         if(!empty($_POST["lastName"])){
+             $_POST["lastName"] = test_input($_POST["lastName"]);
+         }else{
+             array_push($err,"Empty Last Name");
+         }
+         if(!empty($_POST["userName"])){
+             $_POST["userName"] = test_input($_POST["userName"]);
+         }else{
+             array_push($err,"Empty User Name");
+         }
+         if(!empty($_POST["email"])){
+             $_POST["email"] = test_input($_POST["email"]);
+         }else{
+             array_push($err,"Empty Email");
+         }
+         if(!empty($_POST["birthDate"])){
+             $_POST["birthDate"] = test_input($_POST["birthDate"]);
+         }else{
+             array_push($err,"Empty Birth Date");
+         }
+         if(!empty($_POST["phone"])){
+             $_POST["phone"] = test_input($_POST["phone"]);
+         }else{
+             array_push($err,"Empty Phone Number");
+         }
+         if(!empty($_POST["password"])){
+             if(valid_pass($_POST["password"]) == FALSE){
+                 array_push($err,"Password not valid");
+             }else{
+                 $_POST["password"] = valid_pass($_POST["password"]);
+             }
+         }
+         $patUserName = "/^[A-Z,a-z,',_,.,1-9,0]*$/";
+         $patName = "/^[A-Z,a-z, ,']*$/";
+         $patPhone = "/^[1-9,0, ,+]*$/";
 
-    //     }
+         if(empty($err)){
+             preg_match_all($patUserName, $_POST["userName"], $match_userName);
+             preg_match_all($patName,$_POST["firstName"],$match_fName);
+             preg_match_all($patName,$_POST["lastName"],$match_lName);
+             preg_match_all($patPhone,$_POST["phone"],$match_phone);
+             if($_POST["userName"] != $match_userName[0][0]){
+                 array_push($err,"Invalid User Name");
+             }else if ($this->usersModel->checkUser($_POST["userName"]) >= 1){
+                 array_push($err,"User Name already exists");
+             }
+             if($_POST["firstName"] != $match_fName[0][0]){
+                 array_push($err,"Invalid First Name");
+                 echo $_POST["firstName"];
+                 var_dump( $match_fName[0][0]);
+             }
+             if($_POST["lastName"] != $match_lName[0][0]){
+                 array_push($err,"Invalid Last Name");
+             }
+             if($_POST["phone"] != $match_phone[0][0]){
+                 array_push($err,"Invalid phone number");
+             }
+             if (!filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
+                 array_push($err,"Invalid email, ");
+             }else if ($this->usersModel->checkEmail($_POST["email"]) >= 1){
+                 array_push($err,"Email already exists");
+             }
+             $test_arr  = explode('-', $_POST["birthDate"]);
+             if (checkdate($test_arr[0], $test_arr[1], $test_arr[2]) == FALSE) {
+                 array_push($err,"Invalid Date");
+             }else if(settype($test_arr[2],'integer') > 1900 || settype($test_arr[2],'integer') < date("Y")){
+                 array_push($err,"Are you really that old ?");
+             }
+
+             if(empty($err)){
+                 $_POST["userIp"] = getIp();
+                 $_POST["birthDate"] = $test_arr[2] ."-". $test_arr[0] ."-". $test_arr[1];
+                 $id = $this->usersModel->editItem($_POST);
+                 if(settype($id,'integer') != "NaN" || settype($id,'integer') != 0){
+                     return "Sign Up Succesfully!";
+                 }else{
+                     var_dump($id);
+                     return "Internal Server Error";
+                 }
+             }else{
+                 return $err;
+             }
+         }else{
+             return $err;
+         }
+
+        }
 }
 ?>
