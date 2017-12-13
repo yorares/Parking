@@ -35,37 +35,32 @@ class usersModel extends db
     }
     function checkEmail($item){
         $params = [ $item["email"] ];
-
-        $query = 'SELECT * FROM `users` WHERE email = ?';
-        $sth = $this->db->prepare($query);
-        $sth->execute($params);
-        return $sth->rowCount();
-    }
-    function checkUser($item){
-        $params = [ $item["userName"]];
-
         $query = 'SELECT * FROM `users` WHERE email = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
         return $sth->rowCount();
     }
     function deleteItem($item){
-        $params = [$item];
-
+        if($_SESSION["role"] == "admin"){
+           $params = [$item];
         $query = 'DELETE FROM `users` WHERE id = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
         return $sth->rowCount();
+        }
     }
     function selectItemByName($items){
         $params = [$items];
-
         $query = 'SELECT * FROM `users` WHERE user_name = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
 
         return $sth->fetch(PDO::FETCH_ASSOC);
     }
+    function selectAll(){
+		$query = 'SELECT * FROM `users` WHERE 1';
+    	return $this->executeQuery($query);
+	}
 
     function changeStatus($item){
         $params=[$item];

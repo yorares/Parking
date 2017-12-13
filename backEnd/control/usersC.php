@@ -198,7 +198,12 @@ class usersC
         if (empty($_POST['userName'])) {
             return "Cannot get user id1";
         } else {
-            $account = $this->usersModel->selectItemByName($_POST['userName']);
+            $userPattern ="/^[a-z,A-Z,0-9,',.,_]/";
+            preg_match_all($userPattern,$_POST["userName"],$userMatch);
+            if($_POST["userName"] == $userMatch){
+                $userName = $_POST["userName"];
+            }
+            $account = $this->usersModel->selectItemByName($userName);
             var_dump($account);
             if($account == FALSE){
                 return "Cannot get user id2";
