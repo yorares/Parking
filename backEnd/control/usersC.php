@@ -338,8 +338,6 @@ class usersC
              return $err;
          }
 
-<<<<<<< HEAD
-        //  function birthDate(){
         //     setInterval(function(){
         //         $result = $this->usersModel->checkBirthDate();
         //         if($result !==false) {
@@ -350,30 +348,4 @@ class usersC
         // }
         
 }
-=======
-        }
-     function banUser(){
-         if($_SESSION["role"] == "admin"){
-             $variabial = $this->usersModel->banUser($_POST);
-             if($variabial != 1){
-                 return "Something went wrong";
-             }else{
-                 return $variabial;
-             }
-
-         }
-     }
-     function unBanUser(){
-         if($_SESSION["role"] == "admin"){
-             $variabial = $this->usersModel->unBanUser($_POST);
-             if($variabial != 1){
-                 return "Something went wrong";
-             }else{
-                 return $variabial;
-             }
-
-         }
-     }
->>>>>>> e167836de885265926fcf8bc709070d4dd121ee1
 }
-?>
