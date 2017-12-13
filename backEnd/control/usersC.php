@@ -1,6 +1,7 @@
 <?php
 require "model/usersM.php";
 require "helpers/password.php";
+require "helpers/test_input.php";
 
 class usersC
 {
@@ -21,12 +22,7 @@ class usersC
         return $ip;
     }
        $err=[];
-       function test_input($data) {
-           $data = trim($data);
-           $data = stripslashes($data);
-           $data = htmlspecialchars($data);
-           return $data;
-       }
+
        if(!empty($_POST["firstName"])){
            $_POST["firstName"] = test_input($_POST["firstName"]);
        }else{
@@ -224,9 +220,9 @@ class usersC
         }
     }
 
-    function getAll() {
+        function getAll() {
         return $this->usersModel->selectAll();
-    }
+        }
 
      function updateUser() {
 
@@ -240,13 +236,16 @@ class usersC
              }
              return $ip;
          }
+
          $err=[];
+
          function test_input($data) {
              $data = trim($data);
              $data = stripslashes($data);
              $data = htmlspecialchars($data);
              return $data;
          }
+
          if(!empty($_POST["firstName"])){
              $_POST["firstName"] = test_input($_POST["firstName"]);
          }else{
@@ -284,6 +283,7 @@ class usersC
                  $_POST["password"] = valid_pass($_POST["password"]);
              }
          }
+
          $patUserName = "/^[A-Z,a-z,',_,.,1-9,0]*$/";
          $patName = "/^[A-Z,a-z, ,']*$/";
          $patPhone = "/^[1-9,0, ,+]*$/";
