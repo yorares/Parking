@@ -338,7 +338,7 @@ class usersC
              return $err;
          }
 
-<<<<<<< HEAD
+
         //  function birthDate(){
         //     setInterval(function(){
         //         $result = $this->usersModel->checkBirthDate();
@@ -350,7 +350,6 @@ class usersC
         // }
         
 }
-=======
         }
      function banUser(){
          if($_SESSION["role"] == "admin"){
@@ -374,6 +373,5 @@ class usersC
 
          }
      }
->>>>>>> e167836de885265926fcf8bc709070d4dd121ee1
 }
 ?>
