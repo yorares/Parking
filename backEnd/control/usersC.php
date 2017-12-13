@@ -239,13 +239,6 @@ class usersC
 
          $err=[];
 
-         function test_input($data) {
-             $data = trim($data);
-             $data = stripslashes($data);
-             $data = htmlspecialchars($data);
-             return $data;
-         }
-
          if(!empty($_POST["firstName"])){
              $_POST["firstName"] = test_input($_POST["firstName"]);
          }else{
