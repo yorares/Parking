@@ -176,6 +176,15 @@ class usersC
     }
  }
 
+ function logOut(){
+    session_unset();
+    session_destroy();
+    $result = $this->userModel->logOut($_SESSION["id"]);
+    if($result !== 1){
+        return "Something went wrong";
+    }
+ }
+
     function deleteUser(){
         if (empty($_POST['id'])) {
             return "No user id to delete";

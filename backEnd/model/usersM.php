@@ -79,9 +79,16 @@ class usersModel extends db
 
     function changeStatus($item){
         $params=[$item];
-        $query = 'UPDATE `users` SET user_status="online", last_login = CURENT_TIMESTAMP   WHERE user_id = ?';
+        $query = 'UPDATE `users` SET user_status="online", last_login = NOW()   WHERE id = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
     }
 
+    function logOut($item){
+        $params=[$item];
+        $query = 'UPDATE `users` SET user_status = "offline"  WHERE id = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
 }?>
