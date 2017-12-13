@@ -57,10 +57,12 @@ class usersModel extends db
 
         return $sth->fetch(PDO::FETCH_ASSOC);
     }
+
     function selectAll(){
 		$query = 'SELECT * FROM `users` WHERE 1';
     	return $this->executeQuery($query);
-	}
+    }
+    
     function editItem(){
         $params = [ $item["firstName"],
                    $item["lastName"],
@@ -91,4 +93,17 @@ class usersModel extends db
         $sth->execute($params);
         return $sth->rowCount();
     }
+
+    // function checkBirthDate(){
+    //     $hour = date("h");
+    //     $day = date("d");
+    //     $year = date("y");
+    //     $month = date("m");
+    //     $date = "$year"."-"."$month"."-"."$day";
+    //     $query = 'SELECT `first_name`, `last_name` FROM `users` WHERE birth_date = $date'; 
+    //     // $datas = 'SELECT  FROM `user` WHERE birth_date = $year-$month-$day';
+    //     $sth = $this->db->prepare($query);
+    //     $sth->execute();
+    //     return $sth->fetch(PDO::FETCH_ASSOC);
+    // }
 }?>

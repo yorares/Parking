@@ -336,6 +336,16 @@ class usersC
              return $err;
          }
 
-        }
+        //  function birthDate(){
+        //     setInterval(function(){
+        //         $result = $this->usersModel->checkBirthDate();
+        //         if($result !==false) {
+        //             $message = "Happy bday".$result["first_name"]." ".$result["last_name"];            
+        //         }
+        //     }, 86400000);
+        //     return $message;
+        // }
+        
+}
 }
 ?>
