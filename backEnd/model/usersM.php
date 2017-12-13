@@ -18,7 +18,6 @@ class usersModel extends db
         return $this->db->lastInsertId();
     }
     function selectItem($item){
-
         if(!empty($item["email"])){
             $item["who"] = $item["email"];
             $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date` FROM `users` WHERE `email` = ? && password = ?;";
@@ -66,6 +65,13 @@ class usersModel extends db
         $sth->execute($params);
 
         return $sth->fetch(PDO::FETCH_ASSOC);
+    }
+
+    function changeStatus($item){
+        $params=[$item];
+        $query = 'UPDATE `users` SET user_status="online", last_login = CURENT_TIMESTAMP   WHERE user_id = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
     }
 
 }?>

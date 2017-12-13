@@ -132,6 +132,7 @@ class usersC
     // preg_match_all($passPattern,$data['password']);
 
     //validate user name
+
     if(!empty($_POST["userName"])){
         $data['user'] = $_POST["userName"];
         if($_POST["userName"] == $userMatch[0][0]) {
@@ -165,6 +166,7 @@ class usersC
         if (empty($error)) {
             $_SESSION["id"]=$result["id"];
             //$myAccount = $this->usersModel->selectById($_SESSION["id"]);
+            $this->userModel->changeStatus($_SESSION["id"]);
             $_SESSION["role"]= $result["admin"];
             $_SESSION['LAST_ACTIVITY'] = time();
             return $_SESSION["id"].$_SESSION["role"];
