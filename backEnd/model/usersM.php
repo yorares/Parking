@@ -101,4 +101,11 @@ class usersModel extends db
         return $sth->rowCount();
     }
 
+    function logOut($item){
+        $params=[$item];
+        $query = 'UPDATE `users` SET user_status = "offline"  WHERE id = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
 }?>
