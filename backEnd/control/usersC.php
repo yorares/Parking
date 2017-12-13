@@ -178,7 +178,11 @@ class usersC
         if (empty($_POST['id'])) {
             return "No user id to delete";
         } else {
-            $count = $this->usersModel->deleteItem($_POST["id"]);
+            $userPattern ="/^[0-9]/";
+            preg_match_all($userPattern,$_POST['id'],$idMatch);
+            if($_POST["id"] == $idMatch){
+                $count = $this->usersModel->deleteItem($_POST["id"]);
+            }
             if($count == 1){
                 return "User Deleted Succesfully";
             }else{
