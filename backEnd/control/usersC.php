@@ -2,6 +2,7 @@
 require "model/usersM.php";
 require "helpers/password.php";
 require "helpers/test_input.php";
+require "helpers/returnIp.php";
 
 class usersC
 {
@@ -11,16 +12,6 @@ class usersC
 	}
 
    public function signUp(){
-       function getIp(){
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-        return $ip;
-    }
        $err=[];
 
        if(!empty($_POST["firstName"])){
@@ -54,9 +45,9 @@ class usersC
            array_push($err,"Empty Phone Number");
        }
        if(!empty($_POST["password"])){
-       if(valid_pass($_POST["password"]) == FALSE){
-           array_push($err,"Password not valid");
-       }else{
+            if(valid_pass($_POST["password"]) == FALSE){
+                array_push($err,"Password not valid");
+            }else{
             $_POST["password"] = valid_pass($_POST["password"]);
        }
        }
@@ -102,7 +93,7 @@ class usersC
                 $_POST["birthDate"] = $test_arr[2] ."-". $test_arr[0] ."-". $test_arr[1];
                 $id = $this->usersModel->insertItem($_POST);
                 if(settype($id,'integer') != "NaN" || settype($id,'integer') != 0){
-                    return "Sign Up Succesfully!";
+                    return "Sign Up Successfully!";
                 }else{
                     var_dump($id);
                     return "Internal Server Error";
@@ -121,7 +112,7 @@ class usersC
     $error=[];
    // $data['user'] = $_POST["userName"];
    // $data['email'] = $_POST["email"];
-    $data['password'] =$_POST["password"];
+    $data['password'] = $_POST["password"];
     $userPattern ="/^[a-z,A-Z,0-9,',.,_]/";
     preg_match_all($userPattern,$_POST["userName"],$userMatch);
     // $passPattern=
@@ -162,10 +153,11 @@ class usersC
         var_dump($result);
         if($result["active"] == "banned"){array_push($error,"You are Banned!");}
         if (empty($error)) {
-            $_SESSION["id"]=$result["id"];
+            $_SESSION["id"] = $result["id"];
             //$myAccount = $this->usersModel->selectById($_SESSION["id"]);
             $this->usersModel->changeStatus($_SESSION["id"]);
-            $_SESSION["role"]= $result["admin"];
+            $_SESSION["isLogged"] = true; 
+            $_SESSION["role"]= $result["role"];
             $_SESSION['LAST_ACTIVITY'] = time();
             return $_SESSION["id"].$_SESSION["role"];
         }else{
@@ -174,14 +166,14 @@ class usersC
     }
  }
 
- function logOut(){
-    session_unset();
-    session_destroy();
-    $result = $this->userModel->logOut($_SESSION["id"]);
-    if($result !== 1){
-        return "Something went wrong";
+    function logOut(){
+        session_unset();
+        session_destroy();
+        $result = $this->userModel->logOut($_SESSION["id"]);
+        if($result !== 1){
+            return "Something went wrong";
+        }
     }
- }
 
     function deleteUser(){
         if (empty($_POST['id'])) {
@@ -220,9 +212,9 @@ class usersC
         }
     }
 
-        function getAll() {
-        return $this->usersModel->selectAll();
-        }
+     function getAll() {
+         return $this->usersModel->selectAll();
+     }
 
      function updateUser() {
 
@@ -276,6 +268,7 @@ class usersC
                  $_POST["password"] = valid_pass($_POST["password"]);
              }
          }
+
 
          $patUserName = "/^[A-Z,a-z,',_,.,1-9,0]*$/";
          $patName = "/^[A-Z,a-z, ,']*$/";
@@ -343,7 +336,7 @@ class usersC
         // }
         
 }
-
+}
 
      function banUser(){         
          if($_SESSION["role"] == "admin"){

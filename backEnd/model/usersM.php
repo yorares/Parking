@@ -20,10 +20,10 @@ class usersModel extends db
     function selectItem($item){
         if(!empty($item["email"])){
             $item["who"] = $item["email"];
-            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date`, `active` FROM `users` WHERE `email` = ? && password = ?;";
+            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `role`, `last_login`, `creation_date`, `active` FROM `users` WHERE `email` = ? && password = ?;";
         }else if (!empty($item["user"])){
             $item["who"] = $item["user"];
-            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `admin`, `last_login`, `creation_date`, `active` FROM `users` WHERE `user_name` = ? && password = ?;";
+            $query = "SELECT `id`, `user_name`, `password`, `first_name`, `last_name`, `email`, `role`, `last_login`, `creation_date`, `active` FROM `users` WHERE `user_name` = ? && password = ?;";
         }
         $params = [$item["who"],
                     $item["password"]];
@@ -40,6 +40,15 @@ class usersModel extends db
         $sth->execute($params);
         return $sth->rowCount();
     }
+
+    function checkUser($item){
+        $params = [ $item["user_name"] ];
+        $query = 'SELECT * FROM `users` WHERE user_name = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
+
     function deleteItem($item){
         if($_SESSION["role"] == "admin"){
            $params = [$item];
@@ -63,7 +72,7 @@ class usersModel extends db
     	return $this->executeQuery($query);
     }
     
-    function editItem(){
+    function editItem($item){
         $params = [ $item["firstName"],
                    $item["lastName"],
                    $item["userName"],
