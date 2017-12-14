@@ -59,7 +59,7 @@ class reviewC
                 if($dap == 1){
                     return "Edit Succesfull";
                 }else{
-                    return "Something went wrong";
+                    return "Something went wrong!";
                 }
             }
         }else{
