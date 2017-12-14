@@ -10,7 +10,11 @@ $routes["unBanUser"] = ["class" => "usersC", "method" => "unBanUser"];
 $routes["logOut"] = ["class" => "userC", "method" => "logOut"];
 
 //Review routes
+
+$routes["getAverageReview"] = ["class" => "reviewC", "method" => "averageStarsNumber"];
+
 $routes["getAverageReviews"] = ["class" => "reviewC", "method" => "averageStarsNumber"];
+
 $routes["edit"] = ["class" => "reviewC", "method" => "editReview"];
 $routes["deleteReviews"] = ["class" => "reviewC", "method" => "deleteReviews"];
 $routes["getAllReviews"] = ["class" => "reviewC", "method" => "getAll"];
