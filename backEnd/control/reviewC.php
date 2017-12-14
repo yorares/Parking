@@ -55,11 +55,15 @@ class reviewC
                 $_POST['id'] = test_input($_POST['id']);
                 $_POST['starsReview'] = test_input($_POST['starsReview']);
                 $_POST["message"] = test_input($_POST['message']);
-                $dap = $this->reviewsModel->editReviewM($_POST);
-                if($dap == 1){
-                    return "Edit Succesfull";
-                }else{
-                    return "Something went wrong!";
+                $control = $this->reviewsModel->editReviewM($_SESSION);
+                var_dump($control);
+                if($control["id"] == $_POST['id']){
+                    $dap = $this->reviewsModel->editReviewM($_POST);
+                    if($dap == 1){
+                        return "Edit Succesfull";
+                    }else{
+                        return "Something went wrong!";
+                    }
                 }
             }
         }else{

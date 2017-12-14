@@ -34,5 +34,12 @@ class reviewsModel extends db
         $sth->execute($params);
         return $sth->rowCount();
     }
+    function checkUserId($items){
+        $params = [$items["id"]];
+        $query = 'SELECT `id` FROM `reviews` WHERE `user_id` = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->fetch(PDO::FETCH_ASSOC);
+    }
 
 }?>
