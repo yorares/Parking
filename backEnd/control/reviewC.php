@@ -50,13 +50,20 @@ class reviewC
         if($_SESSION["isLogged"] = true){
             $userPattern ="/^[0-9]/";
             preg_match_all($userPattern,$_POST['id'],$idMatch);
-            preg_match_all($userPattern,$_POST['starsReview'],$idMatch);
-
-            if(){
-
+            preg_match_all($userPattern,$_POST['starsReview'],$starMatch);
+            if($_POST['id'] == $idMatch && $_POST['starsReview'] == $starMatch){
+                $_POST['id'] = test_input($_POST['id']);
+                $_POST['starsReview'] = test_input($_POST['starsReview']);
+                $_POST["message"] = test_input($_POST['message']);
+                $dap = $this->reviewsModel->editReviewM($_POST);
+                if($dap == 1){
+                    return "Edit Succesfull";
+                }else{
+                    return "Something went wrong!";
+                }
             }
         }else{
-
+            return "Please log in";
         }
     }
 

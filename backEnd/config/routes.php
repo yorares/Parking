@@ -15,9 +15,6 @@ $routes["logOut"] = ["class" => "userC", "method" => "logOut"];
 $routes["getAverageReviews"] = ["class" => "reviewC", "method" => "averageStarsNumber"];
 
 $routes["edit"] = ["class" => "reviewC", "method" => "editReview"];
-
-$routes["edit"] = ["class" => "reviewC", "method" => "createStarsReview"];
-
 $routes["deleteReviews"] = ["class" => "reviewC", "method" => "deleteReviews"];
 $routes["getAllReviews"] = ["class" => "reviewC", "method" => "getAll"];
 
