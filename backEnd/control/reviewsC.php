@@ -14,8 +14,8 @@ class reviewC
 	function averageStarsNumber(){
 		$error = [];
 		$starsPattern ="/^[0-9,.,]/";
-		preg_match_all($starsPattern,$_POST["starsNumber"],$starsMatch);
-		if(!empty($_POST["starsNumbers"]) && $starsMatch[0][0] === $_POST["starsNumbers"]){
+		// preg_match_all($starsPattern, $_POST["starsNumbers"], $starsMatch);
+		if(!empty($_POST["userId"])){
 			$starsNumber = $this->reviewsModel->starsNumber($_POST["userId"]);
 			return $starsNumber;
 		}else {

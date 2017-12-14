@@ -9,7 +9,8 @@ class reviewsModel extends db
         FROM reviews
         WHERE user_id = ?';
         $sth = $this->db->prepare($query);
-        $result = $sth->execute($params);
+        $sth->execute($params); //returns true
+        $result = $sth->fetch(PDO::FETCH_ASSOC); //returns the result
         return $result;
     }
     function deteleReviews($item){

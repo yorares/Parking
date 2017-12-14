@@ -10,7 +10,7 @@ $routes["unBanUser"] = ["class" => "usersC", "method" => "unBanUser"];
 $routes["logOut"] = ["class" => "userC", "method" => "logOut"];
 
 //Review routes
-$routes["create"] = ["class" => "reviewC", "method" => "averageStarsNumber"];
+$routes["getAverageReview"] = ["class" => "reviewC", "method" => "averageStarsNumber"];
 $routes["edit"] = ["class" => "reviewC", "method" => "editReview"];
 
 $routes["edit"] = ["class" => "reviewC", "method" => "createStarsReview"];
