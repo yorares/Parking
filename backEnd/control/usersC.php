@@ -343,7 +343,7 @@ class usersC
         // }
         
 }
-}
+
 
      function banUser(){         
          if($_SESSION["role"] == "admin"){
