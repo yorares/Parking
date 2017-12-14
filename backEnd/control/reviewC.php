@@ -14,8 +14,8 @@ class reviewC
 	function averageStarsNumber(){
 		$error = [];
 		$starsPattern ="/^[0-9,.,]/";
-		preg_match_all($starsPattern,$_POST["starsNumber"],$starsMatch);
-		if(!empty($_POST["starsNumbers"]) && $starsMatch[0][0] === $_POST["starsNumbers"]){
+		preg_match_all($starsPattern,$_POST["userId"],$starsMatch);
+		if(!empty($_POST["userId"]) && $starsMatch[0][0] === $_POST["userId"]){
 			$starsNumber = $this->reviewsModel->starsNumber($_POST["userId"]);
 			return $starsNumber;
 		}else {
@@ -40,11 +40,24 @@ class reviewC
         }
     }
     function getAll(){
-        var_dump($this->reviewsModel->selectAll());
-        return $this->reviewsModel->selectAll();
+        if($_SESSION["isLogged"] = true){
+            return $this->reviewsModel->selectAll();
+        }else{
+            return "Please log in";
+        }
     }
     function editReview(){
-        
+        if($_SESSION["isLogged"] = true){
+            $userPattern ="/^[0-9]/";
+            preg_match_all($userPattern,$_POST['id'],$idMatch);
+            preg_match_all($userPattern,$_POST['starsReview'],$idMatch);
+
+            if(){
+
+            }
+        }else{
+
+        }
     }
 
 
