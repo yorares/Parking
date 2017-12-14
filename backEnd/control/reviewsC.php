@@ -1,5 +1,5 @@
 <?php
-require "model/reviewsModel.php";
+require "model/reviewsM.php";
 require "helpers/test_input.php";
 require "helpers/returnIp.php";
 
@@ -23,6 +23,5 @@ class reviewC
 		}	
 	}
 
-
-
-}?>
+}
+?>
