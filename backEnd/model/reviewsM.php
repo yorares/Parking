@@ -4,12 +4,13 @@ require_once "db.php";
 class reviewsModel extends db
 {
     function starsNumber($items){
-        $params = [$items["userId"]];
+        $params = [$items];
         $query = 'SELECT AVG( reviews.stars_number ) AS average
         FROM reviews
         WHERE user_id = ?';
         $sth = $this->db->prepare($query);
-        $result = $sth->execute($params);
+        $sth->execute($params);
+        $result = $sth->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
     function deteleReviews($item){
