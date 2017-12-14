@@ -26,5 +26,13 @@ class reviewsModel extends db
         $query = 'SELECT reviews.id, reviews.stars_number, reviews.total_num_reviews, reviews.message, users.user_name, parking.user_id, reviews.creation_date FROM `reviews` INNER JOIN users ON reviews.user_id = users.id INNER JOIN parking ON reviews.parking_id = parking.id WHERE 1';
     	return $this->executeQuery($query);
     }
+    function editReviewM($item){
+        $params = [$items["id"],
+                   $items["starsReview"]];
+        $query = '';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
 
 }?>
