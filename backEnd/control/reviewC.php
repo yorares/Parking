@@ -17,7 +17,6 @@ class reviewC
 		// preg_match_all($starsPattern,$_POST["userId"],$starsMatch);
 		if(!empty($_POST["userId"]) ){
 			$starsNumber = $this->reviewsModel->starsNumber($_POST["userId"]);
-            echo $starsNumber;
             return $starsNumber;
 		}else if (intval($starsNumber) == "NaN") {
             // array_push($error,"The review was not made");
