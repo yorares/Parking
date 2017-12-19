@@ -18,5 +18,10 @@ $routes["createReview"] = ["class" => "reviewC", "method" => "createReview"];
 $routes["edit"] = ["class" => "reviewC", "method" => "editReview"];
 $routes["deleteReviews"] = ["class" => "reviewC", "method" => "deleteReviews"];
 $routes["getAllReviews"] = ["class" => "reviewC", "method" => "getAll"];
+$routes["totalReviews"] = ["class" => "reviewC", "method" => "totalReviews"];
 
+//Price routes
+
+$routes["historyOfParking"] = ["class" => "priceC", "method" => "historyParking"];
+$routes["payParking"] = ["class" => "priceC", "method" => "payParking"];
 ?>
