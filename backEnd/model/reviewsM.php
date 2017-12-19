@@ -13,6 +13,18 @@ class reviewsModel extends db
         $result = $sth->fetch(PDO::FETCH_ASSOC); //returns the result
         return $result;
     }
+    //Insert a review in db
+    function insertReview($item){
+        $params = [$item["starsReview"],
+                    $item["message"],
+                    $item["userId"],
+                    $item["userIdReceive"]];
+
+        $query = 'INSERT INTO `reviews`(`stars_number`, `message`, `user_id`, `user_id_receive`) VALUES (?,?,?,?)';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $this->db->lastInsertId();
+    }    
     function deteleReviews($item){
         if($_SESSION["role"] == "admin"){
             $params = [$item];

@@ -9,8 +9,38 @@ class reviewC
 	private $reviewsModel;
 	function __construct(){
 		$this->reviewsModel = new reviewsModel();
-	}
+    }
+    
    // I create, R delete,R getall,I edit
+    function createReview(){
+        $error=[];
+        if($_SESSION["isLogged"] === true){
+            if(empty($_POST["starsReview"])){
+                array_push($error,"Please give us a review");
+            }else{
+                $reviewPattern ="/^[0-9]/";
+                preg_match_all($reviewPattern,$_POST["starsReview"],$reviewMatch);
+                $data["starsReview"] = test_input($reviewMatch[0][0]);
+            }
+            if(empty($_POST["message"])){
+                array_push($error,"Please leave us a message");
+            }else{
+                $data["message"] = test_input($_POST["message"]);
+            }
+            if(!empty($error)){
+                return "Sorry, please verify if your review is correct";
+            }else{
+                $data["userId"] = $_SESSION["id"];
+                $data["userIdReceive"] = $_POST["userIdReceive"] ;
+                $data["email"] = $_SESSION["email"];
+                $this->reviewsModel->insertReview($data);
+            }
+        }else{
+            return "Please logIn to make a review";
+        }
+        
+    }
+
 	function averageStarsNumber(){
 		$error = [];
 		// $starsPattern ="/^[0-9]/";
@@ -26,8 +56,8 @@ class reviewC
     function deleteReviews(){
         if($_SESSION["role"] == "admin"){
             $_POST["id"] = test_input($_POST["id"]);
-            $userPattern ="/^[0-9]/";
-            preg_match_all($userPattern,$_POST['id'],$idMatch);
+            $reviewPattern ="/^[0-9]/";
+            preg_match_all($reviewPattern,$_POST['id'],$idMatch);
             if($_POST['id'] == $idMatch){
                 $check = $this->reviewsModel->deteleReviews($_POST["id"]);
                 if($check == 1){

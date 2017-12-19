@@ -111,7 +111,7 @@ class usersC
    public function logIn(){
     $error=[];
    // $data['user'] = $_POST["userName"];
-   // $data['email'] = $_POST["email"];
+//    $data['email'] = $_POST["email"];
     $data['password'] = $_POST["password"];
     $userPattern ="/^[a-z,A-Z,0-9,',.,_]/";
     preg_match_all($userPattern,$_POST["userName"],$userMatch);
@@ -153,6 +153,8 @@ class usersC
         var_dump($result);
         if($result["active"] == "banned"){array_push($error,"You are Banned!");}
         if (empty($error)) {
+            $_SESSION["userName"] = $result["user_name"];
+            $_SESSION["email"] = $result["email"];
             $_SESSION["id"] = $result["id"];
             //$myAccount = $this->usersModel->selectById($_SESSION["id"]);
             $this->usersModel->changeStatus($_SESSION["id"]);
@@ -361,4 +363,4 @@ class usersC
          }
      }
 
-}
+
