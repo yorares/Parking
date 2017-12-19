@@ -28,4 +28,7 @@ $routes["payParking"] = ["class" => "priceC", "method" => "payParking"];
 //PARKING ROUTES
 $routes["editParking"] = ["class" => "parkingC", "method" => "editItem"];
 $routes["getAllParking"] = ["class" => "parkingC", "method" => "getAll"];
+$routes["createParking"] = ["class" => "parkingC", "method" => "createParking"];
+
+
 ?>

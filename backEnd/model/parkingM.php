@@ -2,6 +2,7 @@
 require_once "db.php";
 class parkingModel extends db
 {
+
     // edit getall
     function selectAll(){
 		$query = 'SELECT * FROM `parking` WHERE 1';
@@ -21,4 +22,22 @@ class parkingModel extends db
                     $sth->execute($params);
                     return $sth->rowCount();
     }
+
+	function insertItem($items){
+        $params = [ $items["price"],
+                    $items["longitude"],
+                    $items["latitude"],
+                    $items["userId"],
+                    $items["parkingNum"],
+                    $items["startDate"],
+                    $items["endDate"],
+                    $items["details"]];
+
+        $query = 'INSERT INTO `parking`( `price`, `longitude`, `latitude`, `user_id`, `parking_num`, `start_date`, `end_date`, `details`) VALUES (?,?,?,?,?,?,?,?)';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $this->db->lastInsertId();
+    }
+
+
 }?>
