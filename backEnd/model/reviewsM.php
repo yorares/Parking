@@ -41,5 +41,12 @@ class reviewsModel extends db
         $sth->execute($params);
         return $sth->fetch(PDO::FETCH_ASSOC);
     }
+    function sumReviews($items){
+        $params = [$items];
+        $query = 'SELECT SUM(`total_num_reviews`) FROM `reviews` WHERE `parking_id` = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->fetch(PDO::FETCH_ASSOC);
+    }
 
 }?>

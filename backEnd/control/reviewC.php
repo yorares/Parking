@@ -71,6 +71,20 @@ class reviewC
             return "Please log in";
         }
     }
+    function totalReviews(){
+        if(!empty($_POST["parkingId"])){
+            $parkingPattern ="/^[0-9]/";
+            preg_match_all($parkingPattern,$_POST['parkingId'],$idMatch);
+            if($_POST["parkingId"] == $idMatch[0][0]){
+                echo "awd";
+                return $this->reviewsModel->sumReviews($_POST["parkingId"]);
+            }else{
+                return "Invalid data";
+            }
+        }else{
+            return "emtpy11";
+        }
+    }
 
 
 
