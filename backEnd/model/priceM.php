@@ -4,7 +4,7 @@ class priceModel extends db
 {
     function historyOfParking($items){
         $params = [$items];
-        $query = 'SELECT  `parking_id`, `car_number`, `price`, `payment_date` FROM `payment` WHERE `user_id` = 2';
+        $query = 'SELECT  `parking_id`, `car_number`, `price`, `payment_date` FROM `payment` WHERE `user_id` = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
         return $sth->fetch(PDO::FETCH_ASSOC);
