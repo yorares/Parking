@@ -9,6 +9,13 @@ class chatModel extends db
         $sth->execute($params);
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
+    function readDate($item){
+        $params = [$item];
+        $query = 'UPDATE `chat` SET `date_read`= NOW() WHERE `id` = ?';
+        $sth = $this->db->prepare($query);
+        $sth->execute($params);
+        return $sth->rowCount();
+    }
 
 
 }?>

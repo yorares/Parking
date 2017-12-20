@@ -34,6 +34,6 @@ $routes["createParking"] = ["class" => "parkingC", "method" => "createParking"];
 
 $routes["creeateChat"] = ["class" => "chatC", "method" => "createChat"];
 $routes["getChat"] = ["class" => "chatC", "method" => "getChat"];
-
+$routes["readChat"] = ["class" => "chatC", "method" => "readChat"];
 
 ?>
