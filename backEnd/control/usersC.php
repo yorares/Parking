@@ -13,7 +13,6 @@ class usersC
 
    public function signUp(){
        $err=[];
-
        if(!empty($_POST["firstName"])){
            $_POST["firstName"] = test_input($_POST["firstName"]);
        }else{
@@ -67,8 +66,6 @@ class usersC
             }
             if($_POST["firstName"] != $match_fName[0][0]){
                 array_push($err,"Invalid First Name");
-                echo $_POST["firstName"];
-                var_dump( $match_fName[0][0]);
             }
             if($_POST["lastName"] != $match_lName[0][0]){
                 array_push($err,"Invalid Last Name");
@@ -84,18 +81,22 @@ class usersC
             $test_arr  = explode('-', $_POST["birthDate"]);
             if (checkdate($test_arr[0], $test_arr[1], $test_arr[2]) == FALSE) {
                 array_push($err,"Invalid Date");
-            }else if(settype($test_arr[2],'integer') > 1900 || settype($test_arr[2],'integer') < date("Y")){
+            }
+            $an =(int)$test_arr[2];
+            if($an <= 1900){
                 array_push($err,"Are you really that old ?");
+            }else if($an > date("Y")){
+                array_push($err,"are you from the future ?");
             }
 
             if(empty($err)){
                 $_POST["userIp"] = getIp();
                 $_POST["birthDate"] = $test_arr[2] ."-". $test_arr[0] ."-". $test_arr[1];
                 $id = $this->usersModel->insertItem($_POST);
+                $id =(int)$id;
                 if(settype($id,'integer') != "NaN" || settype($id,'integer') != 0){
                     return "Sign Up Successfully!";
                 }else{
-                    var_dump($id);
                     return "Internal Server Error";
                 }
             }else{
@@ -110,14 +111,9 @@ class usersC
     //protected scope when you want to make your variable/function visible in all classes that extend current class including the parent class.
    public function logIn(){
     $error=[];
-   // $data['user'] = $_POST["userName"];
-//    $data['email'] = $_POST["email"];
     $data['password'] = $_POST["password"];
     $userPattern ="/^[a-z,A-Z,0-9,',.,_]/";
     preg_match_all($userPattern,$_POST["userName"],$userMatch);
-    // $passPattern=
-    // preg_match_all($passPattern,$data['password']);
-
     //validate user name
 
     if(!empty($_POST["userName"])){
@@ -158,7 +154,7 @@ class usersC
             $_SESSION["id"] = $result["id"];
             //$myAccount = $this->usersModel->selectById($_SESSION["id"]);
             $this->usersModel->changeStatus($_SESSION["id"]);
-            $_SESSION["isLogged"] = true; 
+            $_SESSION["isLogged"] = true;
             $_SESSION["role"]= $result["role"];
             $_SESSION['LAST_ACTIVITY'] = time();
             return $_SESSION["id"].$_SESSION["role"];
@@ -232,7 +228,7 @@ class usersC
          }
 
          $err=[];
-         
+
          if(!empty($_POST["firstName"])){
              $_POST["firstName"] = test_input($_POST["firstName"]);
          }else{
@@ -331,16 +327,16 @@ class usersC
         //     setInterval(function(){
         //         $result = $this->usersModel->checkBirthDate();
         //         if($result !==false) {
-        //             $message = "Happy bday".$result["first_name"]." ".$result["last_name"];            
+        //             $message = "Happy bday".$result["first_name"]." ".$result["last_name"];
         //         }
         //     }, 86400000);
         //     return $message;
         // }
-        
+
 }
 }
 
-     function banUser(){         
+     function banUser(){
          if($_SESSION["role"] == "admin"){
              $variabial = $this->usersModel->banUser($_POST);
              if($variabial != 1){
