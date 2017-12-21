@@ -56,6 +56,8 @@ class usersModel extends db
         $sth = $this->db->prepare($query);
         $sth->execute($params);
         return $sth->rowCount();
+        }else{
+            return 0;
         }
     }
     function selectItemByName($items){
