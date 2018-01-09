@@ -1,1 +1,4 @@
-// JavaScript source code
+$(document).ready(init);
+function init() {
+
+}
