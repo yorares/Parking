@@ -34,7 +34,7 @@ class usersModel extends db
         return $sth->fetch(PDO::FETCH_ASSOC);
     }
     function checkEmail($item){
-        $params = [ $item["email"] ];
+        $params = [ $item];
         $query = 'SELECT * FROM `users` WHERE email = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
@@ -42,7 +42,7 @@ class usersModel extends db
     }
 
     function checkUser($item){
-        $params = [ $item["user_name"] ];
+        $params = [ $item];
         $query = 'SELECT * FROM `users` WHERE user_name = ?';
         $sth = $this->db->prepare($query);
         $sth->execute($params);
@@ -56,6 +56,8 @@ class usersModel extends db
         $sth = $this->db->prepare($query);
         $sth->execute($params);
         return $sth->rowCount();
+        }else{
+            return 0;
         }
     }
     function selectItemByName($items){

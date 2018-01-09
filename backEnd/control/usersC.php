@@ -13,7 +13,6 @@ class usersC
 
    public function signUp(){
        $err=[];
-
        if(!empty($_POST["firstName"])){
            $_POST["firstName"] = test_input($_POST["firstName"]);
        }else{
@@ -67,8 +66,6 @@ class usersC
             }
             if($_POST["firstName"] != $match_fName[0][0]){
                 array_push($err,"Invalid First Name");
-                echo $_POST["firstName"];
-                var_dump( $match_fName[0][0]);
             }
             if($_POST["lastName"] != $match_lName[0][0]){
                 array_push($err,"Invalid Last Name");
@@ -84,18 +81,22 @@ class usersC
             $test_arr  = explode('-', $_POST["birthDate"]);
             if (checkdate($test_arr[0], $test_arr[1], $test_arr[2]) == FALSE) {
                 array_push($err,"Invalid Date");
-            }else if(settype($test_arr[2],'integer') > 1900 || settype($test_arr[2],'integer') < date("Y")){
+            }
+            $an =(int)$test_arr[2];
+            if($an <= 1900){
                 array_push($err,"Are you really that old ?");
+            }else if($an > date("Y")){
+                array_push($err,"are you from the future ?");
             }
 
             if(empty($err)){
                 $_POST["userIp"] = getIp();
                 $_POST["birthDate"] = $test_arr[2] ."-". $test_arr[0] ."-". $test_arr[1];
                 $id = $this->usersModel->insertItem($_POST);
+                $id =(int)$id;
                 if(settype($id,'integer') != "NaN" || settype($id,'integer') != 0){
                     return "Sign Up Successfully!";
                 }else{
-                    var_dump($id);
                     return "Internal Server Error";
                 }
             }else{
@@ -110,18 +111,12 @@ class usersC
     //protected scope when you want to make your variable/function visible in all classes that extend current class including the parent class.
    public function logIn(){
     $error=[];
-   // $data['user'] = $_POST["userName"];
-//    $data['email'] = $_POST["email"];
-    $data['password'] = $_POST["password"];
     $userPattern ="/^[a-z,A-Z,0-9,',.,_]/";
-    preg_match_all($userPattern,$_POST["userName"],$userMatch);
-    // $passPattern=
-    // preg_match_all($passPattern,$data['password']);
-
     //validate user name
 
     if(!empty($_POST["userName"])){
         $data['user'] = $_POST["userName"];
+        preg_match_all($userPattern,$data['user'],$userMatch);
         if($_POST["userName"] == $userMatch[0][0]) {
          $data['user'] = test_input($_POST["userName"]);
       }
@@ -137,11 +132,12 @@ class usersC
         array_push($error,"User name or Email was not inserted.");
     }
       //Validate password
-    if(empty($data['password'])){
+    if(empty($_POST["password"])){
         array_push($error,"Please enter your password, ");
-    }else if(valid_pass($data['password']) == false){
+    }else if(valid_pass($_POST["password"]) == false){
         array_push($error,"Not valid password.");
-    }else if(valid_pass($data['password'])){
+    }else if(valid_pass($_POST["password"])){
+        $data['password'] = $_POST["password"];
         $data["password"] = valid_pass($data['password']);
     }
  //Final validation-setting session for a specific user
@@ -158,22 +154,31 @@ class usersC
             $_SESSION["id"] = $result["id"];
             //$myAccount = $this->usersModel->selectById($_SESSION["id"]);
             $this->usersModel->changeStatus($_SESSION["id"]);
-            $_SESSION["isLogged"] = true; 
+            $_SESSION["isLogged"] = true;
             $_SESSION["role"]= $result["role"];
             $_SESSION['LAST_ACTIVITY'] = time();
             return $_SESSION["id"].$_SESSION["role"];
         }else{
             sleep(2);return $error;
         }
+    }else{
+        sleep(2);return $error;
     }
  }
 
     function logOut(){
+        if(!empty($_SESSION["id"])){
+        $id = $_SESSION["id"];
+        $result = $this->usersModel->logOut($id);
         session_unset();
         session_destroy();
-        $result = $this->userModel->logOut($_SESSION["id"]);
         if($result !== 1){
             return "Something went wrong";
+        }else{
+            return "Succesfull";
+        }
+        }else{
+            return "nope";
         }
     }
 
@@ -181,15 +186,17 @@ class usersC
         if (empty($_POST['id'])) {
             return "No user id to delete";
         } else {
-            $userPattern ="/^[0-9]/";
+            $userPattern ="/^[0-9]*$/";
             preg_match_all($userPattern,$_POST['id'],$idMatch);
-            if($_POST["id"] == $idMatch){
+            if($_POST["id"] == $idMatch[0][0]){
                 $count = $this->usersModel->deleteItem($_POST["id"]);
+            }else{
+                return "not a number";
             }
             if($count == 1){
                 return "User Deleted Succesfully";
             }else{
-                return "User id not found";
+                return "NOT DELETED";
             }
         }
     }
@@ -197,11 +204,11 @@ class usersC
     function getUser(){
         var_dump( $_POST);
         if (empty($_POST['userName'])) {
-            return "Cannot get user id1";
+            return "Empty field";
         } else {
-            $userPattern ="/^[a-z,A-Z,0-9,',.,_]/";
+            $userPattern ="/^[a-z,A-Z,0-9,',.,_]*$/";
             preg_match_all($userPattern,$_POST["userName"],$userMatch);
-            if($_POST["userName"] == $userMatch){
+            if($_POST["userName"] == $userMatch[0][0]){
                 $userName = $_POST["userName"];
             }
             $account = $this->usersModel->selectItemByName($userName);
@@ -215,7 +222,11 @@ class usersC
     }
 
      function getAll() {
-         return $this->usersModel->selectAll();
+         if($_SESSION["role"] == "admin"){
+             return $this->usersModel->selectAll();
+         }else{
+             return "Forbidden";
+         }
      }
 
      function updateUser() {
@@ -232,7 +243,7 @@ class usersC
          }
 
          $err=[];
-         
+
          if(!empty($_POST["firstName"])){
              $_POST["firstName"] = test_input($_POST["firstName"]);
          }else{
@@ -331,16 +342,16 @@ class usersC
         //     setInterval(function(){
         //         $result = $this->usersModel->checkBirthDate();
         //         if($result !==false) {
-        //             $message = "Happy bday".$result["first_name"]." ".$result["last_name"];            
+        //             $message = "Happy bday".$result["first_name"]." ".$result["last_name"];
         //         }
         //     }, 86400000);
         //     return $message;
         // }
-        
+
 }
 }
 
-     function banUser(){         
+     function banUser(){
          if($_SESSION["role"] == "admin"){
              $variabial = $this->usersModel->banUser($_POST);
              if($variabial != 1){

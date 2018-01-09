@@ -1,0 +1,3 @@
+var userConnect = (function ($) {
+
+})($);
