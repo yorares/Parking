@@ -32,7 +32,7 @@ $routes["createParking"] = ["class" => "parkingC", "method" => "createParking"];
 
 // chat routes
 
-$routes["creeateChat"] = ["class" => "chatC", "method" => "createChat"];
+$routes["createChat"] = ["class" => "chatC", "method" => "createChat"];
 $routes["getChat"] = ["class" => "chatC", "method" => "getChat"];
 
 

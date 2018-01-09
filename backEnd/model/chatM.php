@@ -9,6 +9,8 @@ class chatModel extends db
         $sth->execute($params);
         return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
-
+    function InsertChat($date){
+        
+    }
 
 }?>
