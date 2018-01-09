@@ -1,0 +1,23 @@
+//$ceva:green;
+//@import 'something.scss';
+//@mixin functie($ceva:25px){
+//                              float:left;
+//                              left:$ceva;
+//                          }
+//.container {
+//    color: $ceva;
+//    @include functie();
+//&:hover{
+//
+//}
+//}
+
+@import "base/_variables.scss";
+@import "base/_base.scss";
+@import "base/_mixins.scss";
+
+@import "modules/_buttons.scss";
+@import "modules/_typography.scss";
+
+@import "layout/_footer.scss";
+@import "layout/_header.scss";

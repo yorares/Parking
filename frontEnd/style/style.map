@@ -1,0 +1,26 @@
+{
+	"version": 3,
+	"file": "../sass/style.css",
+	"sources": [
+		"../sass/style.scss",
+		"../sass/base/_variables.scss",
+		"../sass/base/_base.scss",
+		"../sass/base/_mixins.scss",
+		"../sass/modules/_buttons.scss",
+		"../sass/modules/_typography.scss",
+		"../sass/layout/_footer.scss",
+		"../sass/layout/_header.scss"
+	],
+	"sourcesContent": [
+		"//$ceva:green;\r\n//@import 'something.scss';\r\n//@mixin functie($ceva:25px){\r\n//                              float:left;\r\n//                              left:$ceva;\r\n//                          }\r\n//.container {\r\n//    color: $ceva;\r\n//    @include functie();\r\n//&:hover{\r\n//\r\n//}\r\n//}\r\n\r\n@import \"base/_variables.scss\";\r\n@import \"base/_base.scss\";\r\n@import \"base/_mixins.scss\";\r\n\r\n@import \"modules/_buttons.scss\";\r\n@import \"modules/_typography.scss\";\r\n\r\n@import \"layout/_footer.scss\";\r\n@import \"layout/_header.scss\";",
+		"",
+		"",
+		"",
+		".myAccountBtn{\r\n\tposition:absolute;\r\n\tborder:hidden;\r\n\tborder-radius:0px 0px 10px 10px;\r\n\tright:0px;\r\n\ttop:0px;\r\n\tfont-size:20px;\r\n}",
+		"",
+		"",
+		""
+	],
+	"mappings": ";AIAA,AAAA,aAAa,CAAA;EACZ,QAAQ,EAAC,QAAS;EAClB,MAAM,EAAC,MAAO;EACd,aAAa,EAAC,iBAAkB;EAChC,KAAK,EAAC,GAAI;EACV,GAAG,EAAC,GAAI;EACR,SAAS,EAAC,IAAK;CACf",
+	"names": []
+}
