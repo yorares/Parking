@@ -32,8 +32,18 @@ var userConnect = (function($) {
             }
         });
     };
+    var payloadSignUp = function () {
+        let userName = $("input[name=userNameLogIn]").val();
+        let password = $("input[name=passwordLogIn]").val();
 
-    let payloadSignUp = function() {
+        return {
+            userName,
+            password
+        };
+
+    }
+
+    var payloadSignUp = function() {
         let firstName = $("input[name=firstName]").val();
         let lastName = $("input[name=lastName]").val();
         let userName = $("input[name=userName]").val();
@@ -68,6 +78,20 @@ var userConnect = (function($) {
                 return id(null, result);
             });
         },
+        logIn: function (callback) {
+            let params = {
+                url: endpoints.signUp,
+                data: payloadLogIn(),
+                method: 'POST'
+            }
+            make_call(params, function (error, result) {
+                if (error) {
+                    return callback(error);
+                }
+                console.log(result);
+                return callback(null, result);
+            });
+        }
     }
 
 })($);

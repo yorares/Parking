@@ -3,6 +3,11 @@
   text-align: center;
 }
 
+/* line 4, C:/wamp64/www/Parking/frontEnd/sass/base/_base.scss */
+.logInDiv {
+  height: 100%;
+}
+
 /* line 1, C:/wamp64/www/Parking/frontEnd/sass/modules/_buttons.scss */
 .myAccountBtn {
   position: absolute;
