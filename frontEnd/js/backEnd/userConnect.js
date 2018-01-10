@@ -32,7 +32,7 @@ var userConnect = (function($) {
             }
         });
     };
-    var payloadSignUp = function () {
+    var payloadLogIn = function () {
         let userName = $("input[name=userNameLogIn]").val();
         let password = $("input[name=passwordLogIn]").val();
 
