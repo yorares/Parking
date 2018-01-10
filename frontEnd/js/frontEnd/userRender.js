@@ -1,3 +1,3 @@
-var userRender = (function ($) {
+var userRender = (function($) {
 
 })($);
