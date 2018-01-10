@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+var userRender = (function($) {
+=======
 var userRender = (function ($) {
     var logInRender = function () {
         let html = "<div class='logInDiv'>";
@@ -20,5 +23,6 @@ var userRender = (function ($) {
         }
 
     }
+>>>>>>> 5d32f55f37162d3f03555ab83ee54df9330ff9b2
 
 })($);

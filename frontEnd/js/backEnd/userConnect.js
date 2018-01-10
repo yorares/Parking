@@ -1,4 +1,4 @@
-var userConnect = (function ($) {
+var userConnect = (function($) {
     var BASE_URL = 'https://web-10-yorares.c9users.io/PHP Backend/';
     var endpoints = {
         contact: BASE_URL + 'contact',
@@ -15,21 +15,58 @@ var userConnect = (function ($) {
         myAccount: BASE_URL + 'MyAccount'
     };
 
-    var make_call = function (params, callback) {
+    var make_call = function(params, callback) {
         $.ajax({
             url: params.url,
             method: params.method,
             data: params.data || null,
-            success: function (result) {
+            success: function(result) {
                 var resultParsat = JSON.parse(result);
                 callback(null, resultParsat);
             },
-            error: function (XHR, status, error) {
+            error: function(XHR, status, error) {
                 callback(error);
             },
-            complete: function (XHR, status) {
+            complete: function(XHR, status) {
 
             }
         });
     };
+
+    let payloadSignUp = function() {
+        let firstName = $("input[name=firstName]").val();
+        let lastName = $("input[name=lastName]").val();
+        let userName = $("input[name=userName]").val();
+        let email = $("input[name=email]").val();
+        let birthDate = $("input[name=birthDate]").val();
+        let phone = $("input[name=phone]").val();
+        let password = $("input[name=password]").val();
+
+        return {
+            firstName,
+            lastName,
+            userName,
+            email,
+            birthDate,
+            phone,
+            password
+        };
+
+        return {
+            singUp: function(id) {
+                let params = {
+                    url: endpoints.signUp,
+                    data: payloadSignUp(),
+                    method: 'POST'
+                }
+                make_call(params, function(error, result) {
+                    if (error) {
+                        return id(error);
+                    }
+                    console.log(result);
+                    return id(null, result);
+                });
+            },
+        }
+    }
 })($);
