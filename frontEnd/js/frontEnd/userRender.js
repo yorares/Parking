@@ -6,8 +6,9 @@ var userRender = (function($) {
                     html += "<input type='text' class='input logIn' placeholder='User Name or Email' /><br>";
                     html += "<input type='password' class='input logIn' name='password' placeholder='password' /><br>";
                     html += "<input type='button' class='button logInBtn' value='Log In' />";
-                    html += "</div>";
+                    html += "</div> ";
                     html += "<div class='SignUpDiv'>";
+                    html += '<p class="newAccount">Creaza un cont nou</p><br>';
                     html += '<p class="newAccount">Creaza un cont nou</p><br>';
                     html += '<input class="input" type="text" name="firstName" placeholder="First Name" ><br>';
                     html = '<input class="input" type="text" name="lastName" placeholder="Last Name" ><br>';
