@@ -33,7 +33,17 @@ var userConnect = (function($) {
         });
     };
 
-    let payloadSignUp = function() {
+    var payloadLogIn = function () {
+        let userName = $("input[name=userNameLogIn]").val();
+        let password = $("input[name=passwordLogIn]").val();
+
+        return {
+            userName,
+            password
+        };
+    };
+
+    var payloadSignUp = function () {
         let firstName = $("input[name=firstName]").val();
         let lastName = $("input[name=lastName]").val();
         let userName = $("input[name=userName]").val();
@@ -51,8 +61,10 @@ var userConnect = (function($) {
             phone,
             password
         };
+    };
 
         return {
+
             singUp: function(id) {
                 let params = {
                     url: endpoints.signUp,
@@ -67,6 +79,19 @@ var userConnect = (function($) {
                     return id(null, result);
                 });
             },
+            logIn: function (callback) {
+                let params = {
+                    url: endpoints.logIn,
+                    data: payloadLogIn(),
+                    method: 'POST'
+                }
+                make_call(params, function (error, result) {
+                    if (error) {
+                        return callback(error);
+                    }
+                    console.log(result);
+                    return callback(null, result);
+                });
+            }
         }
-    }
 })($);

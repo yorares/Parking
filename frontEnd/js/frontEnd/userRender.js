@@ -1,15 +1,13 @@
-<<<<<<< HEAD
-var userRender = (function($) {
-=======
 var userRender = (function ($) {
     var logInRender = function () {
         let html = "<div class='logInDiv'>";
-        html += "<input type='text' class='input logIn' placeholder='User Name or Email' /><br>";
-        html += "<input type='password' class='input logIn' name='password' placeholder='password' /><br>";
+        html += "<input type='text' class='input logIn' placeholder='User Name or Email' name='userNameLogIn' /><br>";
+        html += "<input type='password' class='input logIn' name='passwordLogIn' placeholder='password' /><br>";
         html += "<input type='button' class='button logInBtn' value='Log In' />";
         html += "</div>";
         return html;
     }
+    
 
 
     return {
@@ -23,6 +21,5 @@ var userRender = (function ($) {
         }
 
     }
->>>>>>> 5d32f55f37162d3f03555ab83ee54df9330ff9b2
 
 })($);
