@@ -51,22 +51,23 @@ var userConnect = (function($) {
             phone,
             password
         };
-
-        return {
-            singUp: function(id) {
-                let params = {
-                    url: endpoints.signUp,
-                    data: payloadSignUp(),
-                    method: 'POST'
-                }
-                make_call(params, function(error, result) {
-                    if (error) {
-                        return id(error);
-                    }
-                    console.log(result);
-                    return id(null, result);
-                });
-            },
-        }
     }
+
+    return {
+        singUp: function(id) {
+            let params = {
+                url: endpoints.signUp,
+                data: payloadSignUp(),
+                method: 'POST'
+            }
+            make_call(params, function(error, result) {
+                if (error) {
+                    return id(error);
+                }
+                console.log(result);
+                return id(null, result);
+            });
+        },
+    }
+
 })($);
